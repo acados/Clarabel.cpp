@@ -20,6 +20,12 @@ set(CLARABEL_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 #----------------------------------------------
 # Clarabel feature configuration
 #----------------------------------------------
+
+# Include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# SDP feature configuration
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
 set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
     none
