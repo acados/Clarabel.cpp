@@ -12,6 +12,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+
+# Include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 # SDP feature configuration
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
 set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
