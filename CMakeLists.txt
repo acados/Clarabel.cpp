@@ -62,7 +62,10 @@ endif()
 add_subdirectory(rust_wrapper)
 
 # Add other subdirectories
-add_subdirectory(examples)
+option(CLARABEL_BUILD_EXAMPLES "Build examples for Clarabel.cpp" true)
+if(CLARABEL_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 # Add tests
 option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" false)
