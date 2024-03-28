@@ -10,13 +10,20 @@ add_library(libclarabel_c_shared INTERFACE)
 # Debug/Release flags
 if(CMAKE_BUILD_TYPE MATCHES Release)
    set(clarabel_c_build_flags "--release")
-   set(clarabel_c_output_directory "${CLARABEL_ROOT_DIR}/rust_wrapper/target/release")
+   set(clarabel_c_output_directory "${CMAKE_PROJECT_DIR}/rust_wrapper/target/release")
 else()
     set(clarabel_c_build_flags "")
-    set(clarabel_c_output_directory "${CLARABEL_ROOT_DIR}/rust_wrapper/target/debug")
+    set(clarabel_c_output_directory "${CMAKE_PROJECT_DIR}/rust_wrapper/target/debug")
 endif()
 
-set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
+if (CLARABEL_C_OUTPUT_DIR)
+    message(STATUS "using CLARABEL_C_OUTPUT_DIR ${CLARABEL_C_OUTPUT_DIR}")
+else()
+    set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
+    set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory})
+    message(STATUS "setting CLARABEL_C_OUTPUT_DIR to ${clarabel_c_output_directory}")
+endif()
+
 
 if(NOT DEFINED CLARABEL_CARGO_FEATURES)
     set(CLARABEL_CARGO_FEATURES "")
@@ -80,6 +87,7 @@ endfunction()
 
 
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
+<<<<<<< HEAD
     append_feature(CLARABEL_CARGO_FEATURES "${CLARABEL_FEATURE_SDP}")
 endif()
 
@@ -108,11 +116,16 @@ endif()
 
 rust_features_has_sdp(CONFIG_SDP)
 if(CONFIG_SDP)
+=======
+    # Set the Rust feature flag
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${CLARABEL_FEATURE_SDP}")
+>>>>>>> ef8e4a8 (allow setting CLARABEL_C_OUTPUT_DIR from outside)
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SDP)
 endif()
 
+<<<<<<< HEAD
 rust_feature_is_enabled("faer-sparse" CONFIG_FAER_SPARSE)
 if(CONFIG_FAER_SPARSE)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_FAER_SPARSE)
@@ -165,17 +178,31 @@ message("-- Cargo options: " "${clarabel_c_build_flags}")
 # -------------------------------------
 # -------------------------------------
 
+=======
+# Add the cargo project as a custom target
+add_custom_target(
+    libclarabel_c
+    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}/rust_wrapper
+    # Commands for building the Rust library
+    COMMAND cargo build ${clarabel_c_build_flags}
+    COMMAND cargo install cbindgen --version 0.24.5
+    # Generate the C header
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.h --lang c
+    # Generate the C++ header
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.hpp
+)
+>>>>>>> ef8e4a8 (allow setting CLARABEL_C_OUTPUT_DIR from outside)
 
 # Get the path to the Rust library for linking
 if(APPLE)
-    set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/libclarabel_c.dylib")
-    set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.a")
+    set(LIBCLARABEL_C_SHARED_PATH "${CLARABEL_C_OUTPUT_DIR}/libclarabel_c.dylib")
+    set(LIBCLARABEL_C_STATIC_PATH "${CLARABEL_C_OUTPUT_DIR}/libclarabel_c.a")
 elseif(UNIX)
-    set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/libclarabel_c.so")
-    set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.a")
+    set(LIBCLARABEL_C_SHARED_PATH "${CLARABEL_C_OUTPUT_DIR}/libclarabel_c.so")
+    set(LIBCLARABEL_C_STATIC_PATH "${CLARABEL_C_OUTPUT_DIR}/libclarabel_c.a")
 elseif(WIN32)
-    set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/clarabel_c.dll.lib")
-    set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/clarabel_c.lib")
+    set(LIBCLARABEL_C_SHARED_PATH "${CLARABEL_C_OUTPUT_DIR}/clarabel_c.dll.lib")
+    set(LIBCLARABEL_C_STATIC_PATH "${CLARABEL_C_OUTPUT_DIR}/clarabel_c.lib")
 endif()
 
 
