@@ -19,7 +19,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # SDP feature configuration
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
-set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
+set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
     none
     sdp-accelerate
     sdp-netlib
@@ -42,7 +42,10 @@ endif()
 add_subdirectory(rust_wrapper)
 
 # Add other subdirectories
-add_subdirectory(examples)
+option(CLARABEL_BUILD_EXAMPLES "Build examples for Clarabel.cpp" true)
+if(CLARABEL_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 # Add tests
 option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" false)
