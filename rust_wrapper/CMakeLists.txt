@@ -37,7 +37,7 @@ endif()
 # Add the cargo project as a custom target
 add_custom_target(
     libclarabel_c
-    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}/rust_wrapper
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     # Commands for building the Rust library
     COMMAND cargo build ${clarabel_c_build_flags}
     COMMAND cargo install cbindgen --version 0.24.5
