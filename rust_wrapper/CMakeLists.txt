@@ -190,6 +190,7 @@ add_custom_target(
     COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.h --lang c
     # Generate the C++ header
     COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.hpp
+    COMMAND cp ${PROJECT_SOURCE_DIR}/target/release/lib* ${CLARABEL_C_OUTPUT_DIR}
 )
 >>>>>>> ef8e4a8 (allow setting CLARABEL_C_OUTPUT_DIR from outside)
 
