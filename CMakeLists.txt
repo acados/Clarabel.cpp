@@ -53,3 +53,13 @@ if(CLARABEL_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()
+
+
+message(STATUS "Clarabel.cpp: CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
+message(STATUS "Clarabel.cpp: LIBRARY = ${LIBRARY}")
+message(STATUS "Clarabel.cpp: PROJECT_NAME = ${PROJECT_NAME}")
+install(TARGETS libclarabel_c_shared EXPORT ${PROJECT_NAME}
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    )
+
+install(EXPORT ${PROJECT_NAME} DESTINATION cmake)
