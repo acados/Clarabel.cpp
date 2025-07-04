@@ -87,7 +87,6 @@ endfunction()
 
 
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
-<<<<<<< HEAD
     append_feature(CLARABEL_CARGO_FEATURES "${CLARABEL_FEATURE_SDP}")
 endif()
 
@@ -116,16 +115,13 @@ endif()
 
 rust_features_has_sdp(CONFIG_SDP)
 if(CONFIG_SDP)
-=======
     # Set the Rust feature flag
     set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${CLARABEL_FEATURE_SDP}")
->>>>>>> ef8e4a8 (allow setting CLARABEL_C_OUTPUT_DIR from outside)
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SDP)
 endif()
 
-<<<<<<< HEAD
 rust_feature_is_enabled("faer-sparse" CONFIG_FAER_SPARSE)
 if(CONFIG_FAER_SPARSE)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_FAER_SPARSE)
@@ -178,7 +174,6 @@ message("-- Cargo options: " "${clarabel_c_build_flags}")
 # -------------------------------------
 # -------------------------------------
 
-=======
 # Add the cargo project as a custom target
 add_custom_target(
     libclarabel_c
@@ -192,7 +187,6 @@ add_custom_target(
     COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.hpp
     COMMAND cp ${PROJECT_SOURCE_DIR}/target/release/lib* ${CLARABEL_C_OUTPUT_DIR}
 )
->>>>>>> ef8e4a8 (allow setting CLARABEL_C_OUTPUT_DIR from outside)
 
 # Get the path to the Rust library for linking
 if(APPLE)
@@ -208,20 +202,20 @@ endif()
 
 
 # Add the cargo project as a custom target
-add_custom_target(
-    libclarabel_c
-    WORKING_DIRECTORY ${CLARABEL_ROOT_DIR}/rust_wrapper
-    # Commands for building the Rust library
-    COMMAND cargo build ${clarabel_c_build_flags}
-    COMMAND cargo install cbindgen
-    # Generate the C header
-    COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.h --lang c
-    # Generate the C++ header
-    COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.hpp
-    BYPRODUCTS
-        "${LIBCLARABEL_C_SHARED_PATH}"
-        "${LIBCLARABEL_C_STATIC_PATH}"
-)
+# add_custom_target(
+#     libclarabel_c
+#     WORKING_DIRECTORY ${CLARABEL_ROOT_DIR}/rust_wrapper
+#     # Commands for building the Rust library
+#     COMMAND cargo build ${clarabel_c_build_flags}
+#     COMMAND cargo install cbindgen
+#     # Generate the C header
+#     COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.h --lang c
+#     # Generate the C++ header
+#     COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.hpp
+#     BYPRODUCTS
+#         "${LIBCLARABEL_C_SHARED_PATH}"
+#         "${LIBCLARABEL_C_STATIC_PATH}"
+# )
 
 
 # Wrap the Rust library in a CMake library target
